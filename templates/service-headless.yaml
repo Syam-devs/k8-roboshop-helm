@@ -8,7 +8,7 @@ metadata:
     component: mysql
     tier: database
 spec: 
-  clusterIp: None
+  clusterIP: None
   selector:
     project: roboshop
     component: mysql
