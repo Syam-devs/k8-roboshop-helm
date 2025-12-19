@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: mysql
+  namespace: roboshop
+  labels:
+    project: roboshop
+    component: mysql
+    tier: database
+spec:
+  serviceName: "mysql-headless"
+  replicas: 1
+  selector:
+    matchLabels:
+      project: roboshop
+      component: mysql
+      tier: database
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        component: mysql
+        tier: database
+    spec:
+      containers:
+      - name: mysql
+        image: "{{ .Values.statefulset.imageURL}}:{{ .Values.statefulset.imageVersion}}"
+        envFrom:
+        - SecretRef:
+            name: mysql
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+    spec:
+      accessModes:
+      - ReadWriteOnce # Only one node can mount this read-write
+      storageClassName: "roboshop-ebs"
+      resources:
+        requests:
+          storage: 2Gi

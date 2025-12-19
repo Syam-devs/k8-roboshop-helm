@@ -1,0 +1,3 @@
+statefulset:
+  imageURL: syamops/mysql
+  imageVersion: v1
